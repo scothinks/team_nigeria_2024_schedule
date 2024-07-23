@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Nigeria Olympics 2024 Schedule</title>
-    <p style="text-align: center; color: #666; font-style: italic;">Prepared by Olohije @_LOHI_ on X</p>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f0f0; }
         h1 { text-align: center; color: #008751; }
+        .credit { text-align: center; font-style: italic; color: #666; margin-bottom: 20px; }
         .menu-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
         .menu-item { flex: 1; margin: 0 10px; }
         select, input { width: 100%; padding: 10px; border: 1px solid #008751; border-radius: 5px; font-size: 16px; }
@@ -24,6 +24,7 @@
 </head>
 <body>
     <h1>Team Nigeria Olympics 2024 Schedule</h1>
+     <div class="credit">Prepared by Olohije @_LOHI_ on X</div>
     <div class="menu-container">
         <div class="menu-item">
             <label for="athlete-select"><i class="fas fa-user icon"></i>Select Athlete</label>
@@ -137,13 +138,18 @@
         athleteSelect.appendChild(option);
     });
 
-    // Populate date select dropdown
-    const dates = [...new Set(scheduleData.map(event => event.date))].sort();
+   // Populate date select dropdown
+    const dates = [...new Set(scheduleData.map(event => event.date))].sort((a, b) => {
+    const dateA = new Date(a.replace(/(ST|ND|RD|TH)/, ''));
+    const dateB = new Date(b.replace(/(ST|ND|RD|TH)/, ''));
+    return dateA - dateB;
+    });
+
     dates.forEach(date => {
-        const option = document.createElement('option');
-        option.value = date;
-        option.textContent = date;
-        dateSelect.appendChild(option);
+    const option = document.createElement('option');
+    option.value = date;
+    option.textContent = date;
+    dateSelect.appendChild(option);
     });
 
     // Event listeners for filters
