@@ -7,27 +7,23 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f0f0; }
-        h1 { text-align: center; color: #008751; }
-        .credit { text-align: center; font-style: italic; color: #666; margin-bottom: 20px; }
-        .menu-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .menu-item { flex: 1; margin: 0 10px; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #008751; border-radius: 5px; font-size: 16px; }
-        .icon { margin-right: 10px; color: #008751; }
-        #schedule { background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .event { margin-bottom: 10px; padding: 10px; background-color: #e6f3e6; border-radius: 5px; }
-        .date { font-weight: bold; color: #008751; }
-        .time { color: #666; }
-        .event-name { font-style: italic; }
-        .athletes { margin-top: 5px; font-size: 0.9em; color: #444; }
-        @media (max-width: 768px) {
-    .menu-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .menu-item {
-        margin-bottom: 10px;
-    }
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f0f0; }
+h1 { text-align: center; color: #008751; }
+.credit { text-align: center; font-style: italic; color: #666; margin-bottom: 20px; }
+.menu-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.menu-item { flex: 1; margin: 0 10px; display: flex; align-items: center; }
+.menu-item label { flex: 0 0 auto; margin-right: 10px; color: #008751; display: flex; align-items: center; }
+.menu-item .icon { margin-right: 5px; color: #008751; }
+.menu-item select, .menu-item input { flex: 1 1 auto; width: 100%; padding: 10px; border: 1px solid #008751; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+#schedule { background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+.event { margin-bottom: 10px; padding: 10px; background-color: #e6f3e6; border-radius: 5px; }
+.date { font-weight: bold; color: #008751; }
+.time { color: #666; }
+.event-name { font-style: italic; }
+.athletes { margin-top: 5px; font-size: 0.9em; color: #444; }
+@media (max-width: 768px) {
+    .menu-container { flex-direction: column; align-items: stretch; }
+    .menu-item { margin-bottom: 10px; }
 }
     </style>
 </head>
