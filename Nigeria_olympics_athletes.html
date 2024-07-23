@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Nigeria Olympics 2024 Schedule</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f0f0; }
+        h1 { text-align: center; color: #008751; }
+        .menu-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .menu-item { flex: 1; margin: 0 10px; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #008751; border-radius: 5px; font-size: 16px; }
+        .icon { margin-right: 10px; color: #008751; }
+        #schedule { background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .event { margin-bottom: 10px; padding: 10px; background-color: #e6f3e6; border-radius: 5px; }
+        .date { font-weight: bold; color: #008751; }
+        .time { color: #666; }
+        .event-name { font-style: italic; }
+        .athletes { margin-top: 5px; font-size: 0.9em; color: #444; }
+    </style>
+</head>
+<body>
+    <h1>Team Nigeria Olympics 2024 Schedule</h1>
+    <div class="menu-container">
+        <div class="menu-item">
+            <label for="athlete-select"><i class="fas fa-user icon"></i>Select Athlete</label>
+            <select id="athlete-select">
+                <option value="">All Athletes</option>
+            </select>
+        </div>
+        <div class="menu-item">
+            <label for="date-select"><i class="fas fa-calendar-alt icon"></i>Select Date</label>
+            <select id="date-select">
+                <option value="">All Dates</option>
+            </select>
+        </div>
+        <div class="menu-item">
+            <label for="event-search"><i class="fas fa-search icon"></i>Search Event</label>
+            <input type="text" id="event-search" placeholder="Type event name...">
+        </div>
+    </div>
+    <div id="schedule"></div>
+
+    <script>
+    const scheduleData = [
+        { date: "25TH JULY", time: "6PM", event: "Women's Football (Group Stage)", athletes: ["Super Falcons"] },
+        { date: "26TH JULY", time: "7PM", event: "Opening Ceremony and Parade", athletes: ["Team Nigeria"] },
+        { date: "27TH JULY", time: "2PM", event: "Table Tennis Preliminary Round (Men's & Women's Singles)", athletes: ["Aruna Quadri", "Olajide Omotayo", "Offiong Edem", "Fatimo Bello"] },
+        { date: "27TH JULY", time: "3:18 PM", event: "Women's Boxing (60kg Prelims)", athletes: ["Cynthia Ogunsemilore"] },
+        { date: "27TH JULY", time: "7PM", event: "Table Tennis Round of 64", athletes: ["Aruna Quadri", "Olajide Omotayo", "Offiong Edem", "Fatimo Bello"] },
+        { date: "28TH JULY", time: "11:04 AM", event: "Men's Boxing (92kg Prelims)", athletes: ["Olaitan Olaore"] },
+        { date: "28TH JULY", time: "6 PM", event: "Women's Football (Group Stage)", athletes: ["Super Falcons"] },
+        { date: "28TH JULY", time: "7PM", event: "Table Tennis Round of 64", athletes: ["Aruna Quadri", "Olajide Omotayo", "Offiong Edem", "Fatimo Bello"] },
+        { date: "29TH JULY", time: "7:30 AM", event: "Men's Badminton (Singles Group play Stage)", athletes: ["Anuoluwapo Juwon Opeyori"] },
+        { date: "29TH JULY", time: "10:00AM", event: "Women's Basketball (Group Phase)", athletes: ["D'Tigresses"] },
+        { date: "30TH JULY", time: "7:30 AM", event: "Men's Badminton (Singles Group play Stage)", athletes: ["Anuoluwapo Juwon Opeyori"] },
+        { date: "31ST JULY", time: "4PM", event: "Women's Football (Group Stage)", athletes: ["Super Falcons"] },
+        { date: "1ST AUGUST", time: "10AM", event: "Men's Swimming- 50m Freestyle", athletes: ["Tobi Sijuade"] },
+        { date: "1ST AUGUST", time: "4:15PM", event: "Women's Basketball (Group Phase)", athletes: ["D'Tigresses"] },
+        { date: "2ND AUGUST", time: "9:15AM", event: "Women's High Jump (Qualification)", athletes: ["Temitope Adesina"] },
+        { date: "2ND AUGUST", time: "10:50 AM", event: "Women's 100m Heats", athletes: ["Rosemary Chukwuma", "Tima Godbless"] },
+        { date: "2ND AUGUST", time: "5:55PM", event: "Women's Discus Throw- Group A Qualification", athletes: ["Obiageri Amaechi", "Ashley Anumba", "Chioma Onyekwere"] },
+        { date: "2ND AUGUST", time: "7:20PM", event: "Women's Discus Throw- Group B Qualification", athletes: ["Obiageri Amaechi", "Ashley Anumba", "Chioma Onyekwere"] },
+        { date: "2ND AUGUST", time: "6:10PM", event: "Mixed Relay 4x400 Heats", athletes: ["Ella Onojuvwevwo", "Esther Elo-Joseph", "Israel Okon-Sunday", "Patience Okon-George", "Sikiru Adeyemi", "Omolara Ogunmakinju"] },
+        { date: "2ND AUGUST", time: "7:10PM", event: "Men's Shotput Qualification", athletes: ["Chukwuebuka Enekwechi"] },
+        { date: "3RD AUGUST", time: "10:45AM", event: "Men's 100m Heats", athletes: ["Favour Ashe", "Kanyinsola Ajayi"] },
+        { date: "3RD AUGUST", time: "6:35PM", event: "Men's Shotput Final", athletes: ["Chukwuebuka Enekwechi"] },
+        { date: "3RD AUGUST", time: "6:50PM", event: "Women's 100m Semi-finals", athletes: ["Rosemary Chukwuma", "Tima Godbless"] },
+        { date: "3RD AUGUST", time: "7:55PM", event: "Mixed 4x400 Relay", athletes: ["Ella Onojuvwevwo", "Esther Elo-Joseph", "Israel Okon-Sunday", "Patience Okon-George", "Sikiru Adeyemi", "Omolara Ogunmakinju"] },
+        { date: "4TH AUGUST", time: "9:20AM", event: "Women's Hammer Throw Qualification Group A", athletes: ["Sade Olatoye"] },
+        { date: "4TH AUGUST", time: "10:45AM", event: "Women's Hammer Throw Qualification Group B", athletes: ["Sade Olatoye"] },
+        { date: "4TH AUGUST", time: "9:55AM", event: "Women's 200m Heats", athletes: ["Favour Ofili"] },
+        { date: "4TH AUGUST", time: "12:30PM", event: "Women's Basketball (Group Phase)", athletes: ["D'Tigresses"] },
+        { date: "4TH AUGUST", time: "1:00PM", event: "Women's Cycling Road Race", athletes: ["Ese Ukpeseraye"] },
+        { date: "4TH AUGUST", time: "6:05 PM", event: "Men's 400m Heats", athletes: ["Samuel Ogazi", "Chidi Okezie"] },
+        { date: "4TH AUGUST", time: "6:50PM", event: "Women's High Jump", athletes: ["Temitope Adesina"] },
+        { date: "4TH AUGUST", time: "7:00PM", event: "Men's 100m semis", athletes: ["Favour Ashe", "Kanyinsola Ajayi"] },
+        { date: "5TH AUGUST", time: "9:05AM", event: "Men's 400m Hurdles Heats", athletes: ["Nathaniel Ezekiel"] },
+        { date: "5TH AUGUST", time: "10:20AM", event: "Men's 400m Repechage round", athletes: ["Samuel Ogazi", "Chidi Okezie"] },
+        { date: "5TH AUGUST", time: "10:55AM", event: "Women's 400m Heats", athletes: ["Esther Elo Joseph", "Ella Onojuvwevwo"] },
+        { date: "5TH AUGUST", time: "2:00PM", event: "Women's 68kg Freestyle Wrestling 1/8 Finals", athletes: ["Blessing Oborodudu"] },
+        { date: "5TH AUGUST", time: "3:20PM", event: "Women's 68kg Freestyle Wrestling 1/4 Finals", athletes: ["Blessing Oborodudu"] },
+        { date: "5TH AUGUST", time: "8:40PM", event: "Women's 68kg Freestyle Wrestling semi Finals", athletes: ["Blessing Oborodudu"] },
+        { date: "5TH AUGUST", time: "6:55PM", event: "Men's 200m Heats", athletes: ["Udodi Onwuzurike"] },
+        { date: "5TH AUGUST", time: "7:30PM", event: "Women's Discus Final", athletes: ["Obiageri Amaechi", "Ashley Anumba", "Chioma Onyekwere"] },
+        { date: "5TH AUGUST", time: "7:45PM", event: "Women's 200m Semis", athletes: ["Favour Ofili"] },
+        { date: "6TH AUGUST", time: "9:20AM", event: "Men's Javelin Qualification Group A", athletes: ["Prosper Chinecherem"] },
+        { date: "6TH AUGUST", time: "10:50 AM", event: "Men's Javelin Qualification Group B", athletes: ["Prosper Chinecherem"] },
+        { date: "6TH AUGUST", time: "10:15AM", event: "Women's Long Jump Qualification", athletes: ["Ese Brume", "Ruth Usoro", "Prestina Ochonogor"] },
+        { date: "6TH AUGUST", time: "10:20AM", event: "Women's 400m Repechage", athletes: ["Esther Elo Joseph", "Ella Onojuvwevwo"] },
+        { date: "6TH AUGUST", time: "11:00AM", event: "Men's 400m Hurdles Repechage", athletes: ["Nathaniel Ezekiel"] },
+        { date: "6TH AUGUST", time: "11:10 AM", event: "Women's Canoe Sprint 500m Heats", athletes: ["Beauty Otudeo", "Ayomide Bello"] },
+        { date: "6TH AUGUST", time: "6:35PM", event: "Men's 400m Semi", athletes: ["Samuel Ogazi", "Chidi Okezie"] },
+        { date: "6TH AUGUST", time: "6:55PM", event: "Women's Hammer Final", athletes: ["Sade Olatoye"] },
+        { date: "6TH AUGUST", time: "8:40PM", event: "Women's 200m Final", athletes: ["Favour Ofili"] },
+        { date: "7TH AUGUST", time: "9:15AM", event: "Women's 100m Hurdles Heats", athletes: ["Tobi Amusan"] },
+        { date: "7TH AUGUST", time: "10:30AM", event: "Women's Freestyle Wrestling 53kg", athletes: ["Christianah Ogunsanya"] },
+        { date: "7TH AUGUST", time: "10:55AM", event: "Men's 800m Heats", athletes: ["Edose Ibadin"] },
+        { date: "7TH AUGUST", time: "6:35PM", event: "Men's 400m Hurdles Semi Final", athletes: ["Nathaniel Ezekiel"] },
+        { date: "7TH AUGUST", time: "7:02PM", event: "Men's 200m Semi Final", athletes: ["Udodi Onwuzurike"] },
+        { date: "7TH AUGUST", time: "7:45PM", event: "Women's 400m Semi Final", athletes: ["Esther Elo Joseph", "Ella Onojuvwevwo"] },
+        { date: "7TH AUGUST", time: "8:20PM", event: "Men's 400m Final", athletes: ["Samuel Ogazi", "Chidi Okezie"] },
+        { date: "8TH AUGUST", time: "10:30AM", event: "Women's Freestyle Wrestling 57kg", athletes: ["Odunayo Adekuoroye"] },
+        { date: "8TH AUGUST", time: "10:30AM", event: "Women's 4x100 Relay Heats", athletes: ["Rosemary Chukwuma", "Favour Ofili", "Justina Eyakpobeyan", "Tima Godbless", "Olayinka Olajide"] },
+        { date: "8TH AUGUST", time: "10:35AM", event: "Men's 4x100 Relay Heats", athletes: ["Kayinsola Ajayi", "Alaba Akintola", "Favour Ashe", "Usheoritse Itsekiri", "Udodi Onwuzurike"] },
+        { date: "8TH AUGUST", time: "TBD", event: "Women's Weightlifting 59kg", athletes: ["Rafiatu Lawal"] },
+        { date: "8TH AUGUST", time: "7:00PM", event: "Women's Long Jump Final", athletes: ["Ese Brume", "Ruth Usoro"] },
+        { date: "8TH AUGUST", time: "7:25PM", event: "Men's Javelin Final", athletes: ["Prosper Chinecherem"] },
+        { date: "9TH AUGUST", time: "8:09AM", event: "Women's Taekwando 67kg", athletes: ["Elizabeth Anyanacho"] },
+        { date: "9TH AUGUST", time: "10:05AM", event: "Men's 4x400m Heats", athletes: ["Samuel Ogazi", "Dubem Amene", "Chidi Okezie", "Israel Sunday Okon", "Ifeanyi Emmanuel Ojeli"] },
+        { date: "9TH AUGUST", time: "10:30AM", event: "Men's 800m Semi Finals", athletes: ["Edose Ibadin"] },
+        { date: "9TH AUGUST", time: "10:30AM", event: "Men's Freestyle Wrestling 125kg", athletes: ["Ashton Mutuwa"] },
+        { date: "9TH AUGUST", time: "10:30AM", event: "Women's Freestyle Wrestling 62kg", athletes: ["Esther Kolawole"] },
+        { date: "9TH AUGUST", time: "11:05AM", event: "Women's 100m Hurdles Semi Finals", athletes: ["Tobi Amusan"] },
+        { date: "9TH AUGUST", time: "6:30PM", event: "Women's 4x100m Relay Final", athletes: ["Rosemary Chukwuma", "Favour Ofili", "Justina Eyakpobeyan", "Tima Godbless", "Olayinka Olajide"] },
+        { date: "9TH AUGUST", time: "6:30PM", event: "Women's 71kg Weightlifting", athletes: ["Joy Ogbonne Eze"] },
+        { date: "9TH AUGUST", time: "6:45PM", event: "Men's 4x100 Relay Final", athletes: ["Kayinsola Ajayi", "Alaba Akintola", "Favour Ashe", "Usheoritse Itsekiri", "Udodi Onwuzurike"] },
+        { date: "10TH AUGUST", time: "10:30AM", event: "Women's Freestyle Wrestling", athletes: ["Hannah Reuben"] },
+        { date: "10TH AUGUST", time: "6:45PM", event: "Women's 100m Hurdles Final", athletes: ["Tobi Amusan"] },
+        { date: "10TH AUGUST", time: "8:12PM", event: "Men's 4x400 Relay Final", athletes: ["Samuel Ogazi", "Dubem Amene", "Chidi Okezie", "Israel Sunday Okon", "Ifeanyi Emmanuel Ojeli"] }
+    ];
+
+    const athleteSelect = document.getElementById('athlete-select');
+    const dateSelect = document.getElementById('date-select');
+    const eventSearch = document.getElementById('event-search');
+    const scheduleDiv = document.getElementById('schedule');
+
+    // Populate athlete select dropdown
+    const athletes = [...new Set(scheduleData.flatMap(event => event.athletes))].sort();
+    athletes.forEach(athlete => {
+        const option = document.createElement('option');
+        option.value = athlete;
+        option.textContent = athlete;
+        athleteSelect.appendChild(option);
+    });
+
+    // Populate date select dropdown
+    const dates = [...new Set(scheduleData.map(event => event.date))].sort();
+    dates.forEach(date => {
+        const option = document.createElement('option');
+        option.value = date;
+        option.textContent = date;
+        dateSelect.appendChild(option);
+    });
+
+    // Event listeners for filters
+    athleteSelect.addEventListener('change', updateSchedule);
+    dateSelect.addEventListener('change', updateSchedule);
+    eventSearch.addEventListener('input', updateSchedule);
+
+    function updateSchedule() {
+        const selectedAthlete = athleteSelect.value;
+        const selectedDate = dateSelect.value;
+        const searchTerm = eventSearch.value.toLowerCase();
+
+        const filteredEvents = scheduleData.filter(event => 
+            (selectedAthlete === '' || event.athletes.includes(selectedAthlete)) &&
+            (selectedDate === '' || event.date === selectedDate) &&
+            (searchTerm === '' || event.event.toLowerCase().includes(searchTerm))
+        );
+
+        displayEvents(filteredEvents);
+    }
+
+    function displayEvents(events) {
+        scheduleDiv.innerHTML = '';
+        events.forEach(event => {
+            const eventDiv = document.createElement('div');
+            eventDiv.className = 'event';
+            eventDiv.innerHTML = `
+                <span class="date">${event.date}</span> 
+                <span class="time">${event.time}</span>: 
+                <span class="event-name">${event.event}</span>
+                <div class="athletes">Athletes: ${event.athletes.join(', ')}</div>
+            `;
+            scheduleDiv.appendChild(eventDiv);
+        });
+    }
+
+    // Initial display
+    updateSchedule();
+    </script>
+</body>
+</html>
